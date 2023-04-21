@@ -1,0 +1,23 @@
+﻿@model List<Card>
+
+<div class="container">
+    <div class="row">
+        @foreach (var card in Model)
+        {
+                <div class="col-md-4 col-12 mb-4">
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('@Url.Content(card.UrlImage)')">
+                            <div class="card-title">@card.Title</div>
+                            <div class="card-buttons">
+                                <button class="btn btn-primary">Editar</button>
+                                <button class="btn btn-danger">Eliminar</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@card.Description</p>
+                        </div>
+                    </div>
+                </div>
+        }
+    </div>
+</div>
