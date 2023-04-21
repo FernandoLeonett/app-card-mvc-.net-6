@@ -64,7 +64,10 @@
 
 .card-body {
     padding: 20px;
+    background-color: #333333;
+    color: #ffffff;
 }
+
 
 @media (max-width: 767.98px) {
     .card-image {
