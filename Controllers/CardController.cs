@@ -1,6 +1,7 @@
 ﻿using app_card.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Reflection;
 
 namespace app_card.Controllers
@@ -34,8 +35,13 @@ namespace app_card.Controllers
         // GET: HomeController/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new CardViewModel();
+            model.ImageOptions = new SelectList(new List<string> { "option1", "option2", "option3" }); // Lista de opciones para la imagen
+
+            return RedirectToAction("Index");
         }
+
+
 
         // POST: HomeController/Create
         [HttpPost]

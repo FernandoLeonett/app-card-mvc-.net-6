@@ -1,0 +1,42 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model CardViewModel
+
+<div class="modal fade" id="agregar-modal" tabindex="-1" aria-labelledby="agregar-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregar-modal-label">Agregar nueva tarjeta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Create", "Card", FormMethod.Post, new { id = "agregar-form" }))
+                {
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", id = "title" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", id = "description" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
+                @*    <div class="mb-3">
+                        @Html.LabelFor(m => m.Image, new { @class = "form-label" })
+                        @Html.DropDownListFor(m => m.Image, Model.ImageOptions, new { @class = "form-control", id = "image" })
+                        @Html.ValidationMessageFor(m => m.Image, "", new { @class = "text-danger" })
+                    </div>*@
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary guardar-btn">Guardar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
