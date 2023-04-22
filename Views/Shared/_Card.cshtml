@@ -1,0 +1,142 @@
+﻿@model Card
+
+<div class="col-md-4 col-12 mb-4">
+    <div class="card">
+        <div class="card-image" style="background-image: url('@Url.Content(string.IsNullOrEmpty(Model.UrlImage) ? "~/img/default-image.jpg" : Model.UrlImage)')">
+            <div class="card-title">@Model.Title</div>
+            <div class="card-buttons">
+                <button type="button" class="btn btn-primary editar-btn" data-bs-toggle="modal" data-bs-target="#editar-modal">
+                    Editar
+                </button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirm-delete-modal-@Model.Id" onclick="showDeleteModal('@Model.Id', '@Model.Title')">Eliminar</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text">@Model.Description</p>
+        </div>
+    </div>
+</div>
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-delete-modal-label">Confirmar eliminación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar la tarjeta "<span id="card-title"></span>"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form id="delete-form" method="post" action="@Url.Action("Delete", "Card")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="card-id" value="@Model.Id" />
+                    <button id="confirm-delete-btn" type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal de edición -->
+<div class="modal fade" id="editar-modal" tabindex="-1" aria-labelledby="editar-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar-modal-label">Editar información</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Edit", "Card", FormMethod.Post, new { id = "editar-form" }))
+                {
+                    @Html.HiddenFor(m => m.Id) <!-- Agrega este input oculto -->
+                    @Html.HiddenFor(m => m.Description) <!-- Agrega este input oculto -->
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", id = "title" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", id = "description" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary guardar-btn">Guardar cambios</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showDeleteModal(id, title) {
+        // Actualiza el título del modal con el título de la tarjeta que se está eliminando
+        document.getElementById('card-title').innerText = title;
+
+        // Actualiza la URL de la acción de eliminación en el formulario
+        document.getElementById('delete-form').action = '@Url.Action("Delete", "Card")/' + id;
+
+        // Actualiza el valor del campo id en el formulario
+        document.getElementById('card-id').value = id;
+
+        // Muestra el modal de confirmación de eliminación
+        var confirmDeleteModal = document.getElementById('confirm-delete-modal');
+        confirmDeleteModal.style.display = 'block';
+        confirmDeleteModal.classList.add('show');
+        document.body.classList.add('modal-open');
+
+        // Agrega evento al botón de confirmar
+        document.getElementById('confirm-delete-btn').addEventListener('click', function () {
+            document.getElementById('delete-form').submit();
+        });
+    }
+
+
+    // Oculta el modal y elimina las clases de la ventana modal y el cuerpo del documento
+    var hideModal = function () {
+        var confirmDeleteModal = document.getElementById('confirm-delete-modal');
+        confirmDeleteModal.classList.remove('show');
+        confirmDeleteModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+
+    // Busca todos los botones de cerrar modal y les asigna la función hideModal al evento click
+    var cancelButtons = document.querySelectorAll('[data-dismiss="modal"]');
+    cancelButtons.forEach(function (cancelButton) {
+        cancelButton.addEventListener('click', hideModal);
+    });
+    function enviarFormulario() {
+    console.log("guardadm")
+    var title = document.getElementById('title').value;
+    var description = document.getElementById('description').value;
+
+    if (title.trim() === '' || description.trim() === '') {
+      alert('Por favor, rellene todos los campos.');
+      return;
+    }
+
+    var formulario = document.getElementById('editar-form');
+    var formData = new FormData(formulario);
+
+    var id = "@Model.Id";
+    var url = "@Url.Action("Edit", "Card", new { id = "-1" })";
+    url = url.replace("-1", id);
+
+    var httpClient = new HttpClient();
+    var request = new HttpRequestMessage(HttpMethod.Post, url);
+    request.Content = new StringContent(formData.toString(), Encoding.UTF8, "application/x-www-form-urlencoded");
+    httpClient.Send(request);
+
+    $('#editar-modal').modal('hide');
+    }
+
+</script>

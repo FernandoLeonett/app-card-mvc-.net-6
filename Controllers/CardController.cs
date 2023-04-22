@@ -1,6 +1,7 @@
 ﻿using app_card.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace app_card.Controllers
 {
@@ -51,46 +52,32 @@ namespace app_card.Controllers
             }
         }
 
-        // GET: HomeController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: CardController/Edit/5
+        [HttpPost]
+        public IActionResult Edit(string title, string description)
         {
-            return View();
+            // actualizar los datos en la base de datos
+            // ...
+
+            // redirigir al usuario a la página principal
+            return RedirectToAction("Index");
         }
+
 
         // POST: HomeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: HomeController/Delete/5
+
+
+        // DELETE: CardController/Delete/5
+        [Route("Card/Delete/{id}")]
         public ActionResult Delete(int id)
         {
-            return View();
+            // Código del método
+            return RedirectToAction("Index");
         }
 
-        // POST: HomeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+
+
+
     }
 }

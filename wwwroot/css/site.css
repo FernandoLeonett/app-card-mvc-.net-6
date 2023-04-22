@@ -67,26 +67,25 @@
     background-color: #333333;
     color: #ffffff;
 }
-
-
-@media (max-width: 767.98px) {
-    .card-image {
-        height: 200px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .card-image {
-        height: 250px;
-    }
-}
-
-@media (min-width: 992px) {
-    .card-image {
-        height: 300px;
+    @media (max-width: 767.98px) {
+        .card-image {
+            height: 200px;
+        }
     }
 
-    .col-md-4 {
-        max-width: 33.333333%;
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        .card-image {
+            height: 250px;
+        }
     }
-}
+
+    @media (min-width: 992px) {
+        .card-image {
+            height: 300px;
+        }
+
+        .col-md-4 {
+            max-width: 33.333333%;
+        }
+    }
+
