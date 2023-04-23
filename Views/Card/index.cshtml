@@ -1,13 +1,11 @@
-﻿@model List<Card>
+﻿@model IndexViewModel
 
 <div class="container">
     <!-- Button para abrir el modal -->
-    <button id="addCardBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCardModal">
-        Agregar Card
-    </button>
+  
 
     <div class="row">
-        @foreach (var card in Model)
+        @foreach (var card in Model.Cards)
         {
             @await Html.PartialAsync("_Card", card)
         }
@@ -26,35 +24,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addCardForm">
-                    <div class="form-group">
-                        <label for="titleInput">Título</label>
-                        <input type="text" class="form-control" id="titleInput" name="title" placeholder="Ingrese el título de la card">
-                    </div>
-                    <div class="form-group">
-                        <label for="descriptionInput">Descripción</label>
-                        <textarea class="form-control" id="descriptionInput" name="description" placeholder="Ingrese la descripción de la card"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="imageSelect">Imagen</label>
-                        <select class="form-control" id="imageSelect" name="image">
-                            <option value="image1.jpg">Imagen 1</option>
-                            <option value="image2.jpg">Imagen 2</option>
-                            <option value="image3.jpg">Imagen 3</option>
-                        </select>
-                    </div>
-                </form>
+
+
+              @await Html.PartialAsync("_Create", Model.NewCard)
+               
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeBtn">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="addCardFormBtn">Agregar</button>
-            </div>
+            
         </div>
     </div>
 </div>
 
-@section scripts {
-    <script>
+   <script>
         // Obtener el botón y el modal
         var btn = document.getElementById("addCardBtn");
         var modal = document.getElementById("addCardModal");
@@ -79,25 +59,26 @@
     });
 
     // Agregar card
-    $('#addCardFormBtn').click(function () {
-        var title = $('#titleInput').val();
-        var description = $('#descriptionInput').val();
-        var image = $('#imageSelect').val();
-        $.ajax({
-            type: "POST",
-            url: "/Cards/Create",
-            data: { title: title, description: description, image: image },
-            success: function (result) {
-                // Recargar la página después de agregar la card
-                location.reload();
-            }
-        });
+    document.getElementById('addCardFormBtn').addEventListener("click",function () {
+        console.log("abierto")
+        var title = document.getElementById('titleInput').value;
+        var description = document.getElementById('descriptionInput').value;
+        var image = document.getElementById('imageSelect').value;
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Cards/Create",
+        //    data: { title: title, description: description, image: image },
+        //    success: function (result) {
+        //        // Recargar la página después de agregar la card
+        //        location.reload();
+        //    }
+        //});
     });
 
     // Validar el formulario antes de enviarlo
-    $('#addCardForm').submit(function (event) {
-        var title = $('#titleInput').val();
-        var description = $('#descriptionInput').val();
+    document.getElementById('addCardForm').addEventListener("click",function (event) {
+        var title = document.getElementById('titleInput').value;
+        var description = document.getElementById('descriptionInput').value;
 
 
         if (title == "" || description == "") {
@@ -110,4 +91,3 @@
         });
 
     </script>
-}
