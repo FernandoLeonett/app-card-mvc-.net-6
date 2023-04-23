@@ -31,6 +31,12 @@
                         @Html.ValidationMessageFor(model => model.ImageOptions)
                     </div>
 
+                    <div class="form-group">
+                        <label for="DataSource">Fuente de datos:</label>
+                        @Html.DropDownListFor(model => model.DataSource, new SelectList(Enum.GetValues(typeof(DataSource))), new { @class = "form-control" })
+                    </div>
+
+
                     <button type="submit" class="btn btn-primary">Agregar</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 }

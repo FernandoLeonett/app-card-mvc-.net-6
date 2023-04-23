@@ -15,8 +15,15 @@
         <div class="card-body">
             <p class="card-text">@Model.Description</p>
         </div>
+        <div class="card-data-source">
+            <p>Fuente de datos: @Model.DataSource</p> <!-- Nuevo elemento para mostrar el origen de los datos -->
+        </div>
     </div>
 </div>
+
+
+
+
 <!-- Modal de confirmación de eliminación -->
 @await Html.PartialAsync("_ConfirmDelete", Model)
 

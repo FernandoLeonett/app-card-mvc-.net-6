@@ -11,8 +11,9 @@ public class CardViewModel
     [Required(ErrorMessage = "La descripción es requerida")]
     public string Description { get; set; }
 
- 
-  
+    public DataSource DataSource { get; set; }
+
+
 
     public SelectList ImageOptions { get; set; } // Opciones para la selección de la imagen
 }

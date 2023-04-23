@@ -5,6 +5,10 @@
     margin: 20px auto;
     padding: 10px;
 }
+.card-data-source {
+    font-weight: bold;
+    color: blue;
+}
 
 .card {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
