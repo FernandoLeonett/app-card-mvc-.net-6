@@ -32,84 +32,94 @@ namespace app_card.Controllers
                 NewCard = new CardViewModel
                 {
                     ImageOptions = new SelectList(imageOptions, "Value", "Text")
-        }
+                }
 
 
 
-    };
+            };
 
             return View(model);
         }
-    
 
 
 
-           
 
 
 
-    
-
-    // GET: HomeController/Details/5
-    public ActionResult Details(int id)
-    {
-        return View();
-    }
-
-    // GET: HomeController/Create
-    public ActionResult Create()
-    {
-        var model = new CardViewModel();
-        model.ImageOptions = new SelectList(new List<string> { "option1", "option2", "option3" }); // Lista de opciones para la imagen
-
-        return RedirectToAction("Index");
-    }
 
 
 
-    // POST: HomeController/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Create(CardViewModel card, string ImageOptions)
-    {
-        try
-        {
-               Card newCard = new Card { Description =card.Description,Title = card.Title };
-                
-            return RedirectToAction(nameof(Index));
-        }
-        catch
+
+        // GET: HomeController/Details/5
+        public ActionResult Details(int id)
         {
             return View();
         }
+
+        // GET: HomeController/Create
+        public ActionResult Create()
+        {
+            var model = new CardViewModel();
+            model.ImageOptions = new SelectList(new List<string> { "option1", "option2", "option3" }); // Lista de opciones para la imagen
+
+            return RedirectToAction("Index");
+        }
+
+
+
+        // POST: HomeController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(CardViewModel card, string ImageOptions)
+        {
+            try
+            {
+                Card newCard = new Card { Description = card.Description, Title = card.Title };
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: CardController/Edit/5
+        [HttpPost]
+        public IActionResult Edit(string title, string description)
+        {
+            // actualizar los datos en la base de datos
+            // ...
+
+            // redirigir al usuario a la página principal
+            return RedirectToAction("Index");
+        }
+
+
+        // POST: HomeController/Edit/5
+
+
+
+
+        // DELETE: CardController/Delete/5
+        [Route("Card/Delete/{id}")]
+        public ActionResult Delete(int id)
+        {
+            // Código del método
+            return RedirectToAction("Index");
+        }
+        public ActionResult DeleteModal(int id, string title)
+        {
+
+            Card card= new Card { Title = title, Id=id };
+
+            TempData["deleteCard"] = card;
+            // Código del método
+          return RedirectToAction("Index");
+        }
+
+
+
+
     }
-
-    // GET: CardController/Edit/5
-    [HttpPost]
-    public IActionResult Edit(string title, string description)
-    {
-        // actualizar los datos en la base de datos
-        // ...
-
-        // redirigir al usuario a la página principal
-        return RedirectToAction("Index");
-    }
-
-
-    // POST: HomeController/Edit/5
-
-
-
-    // DELETE: CardController/Delete/5
-    [Route("Card/Delete/{id}")]
-    public ActionResult Delete(int id)
-    {
-        // Código del método
-        return RedirectToAction("Index");
-    }
-
-
-
-
-}
 }

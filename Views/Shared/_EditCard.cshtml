@@ -1,0 +1,36 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Card
+<div class="modal fade" id="editar-modal-@Model.Id" tabindex="-1" aria-labelledby="editar-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editar-modal-label">Editar información</h5>
+                <button type="button" class="btn-close-editx" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Edit", "Card"))
+                {
+                    @Html.HiddenFor(m => m.Id) <!-- Agrega este input oculto -->
+                    @Html.HiddenFor(m => m.Description) <!-- Agrega este input oculto -->
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", id = "title" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", id = "description" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary guardar-btn">Guardar cambios</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

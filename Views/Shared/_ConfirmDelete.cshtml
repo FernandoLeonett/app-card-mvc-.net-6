@@ -1,17 +1,20 @@
-﻿@model Card
-
-<div>
-    ¿Está seguro que desea eliminar la tarjeta "@Html.LabelFor(m => m.Title)"?
+﻿
+@model Card
+<div class="modal fade" id="confirm-delete-modal-@Model.Id" tabindex="-1" aria-labelledby="confirm-delete-modal-label-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-delete-modal-label-@Model.Id">Eliminar tarjeta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar la tarjeta @Model.Title?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="@Url.Action("Delete", "Card", new { id = Model.Id })" class="btn btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-    @using (Html.BeginForm("Delete", "Card", FormMethod.Post, new { id = "delete-form" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Id)
-        <button id="confirm-delete-btn" type="submit" class="btn btn-danger">Confirmar</button>
-    }
-</div>
-
-
 

@@ -12,82 +12,13 @@
     </div>
 
 </div>
-
-<!-- Modal para agregar una nueva card -->
-<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="addCardModalLabel">Agregar Card</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+@await Html.PartialAsync("_Create", Model.NewCard)
 
 
-              @await Html.PartialAsync("_Create", Model.NewCard)
+
+
+             
                
-            </div>
-            
-        </div>
-    </div>
-</div>
+   
 
-   <script>
-        // Obtener el botón y el modal
-        var btn = document.getElementById("addCardBtn");
-        var modal = document.getElementById("addCardModal");
-        var closeBtn = document.getElementById("closeBtn");
-        var closeX = modal.querySelector('[data-dismiss="modal"]');
-
-        // Cuando se haga click en el botón, abrir el modal
-        btn.addEventListener("click", function () {
-            console.log("abierto");
-            $(modal).modal('show');
-        });
-
-        // Cuando se haga click en el botón de cerrar, cerrar el modal
-        closeBtn.addEventListener("click", function () {
-            console.log("cerrado");
-            $(modal).modal('hide');
-        });
-    // Cuando se haga click en la X, cerrar el modal
-    closeX.addEventListener("click", function () {
-        console.log("cerrado");
-        $(modal).modal('hide');
-    });
-
-    // Agregar card
-    document.getElementById('addCardFormBtn').addEventListener("click",function () {
-        console.log("abierto")
-        var title = document.getElementById('titleInput').value;
-        var description = document.getElementById('descriptionInput').value;
-        var image = document.getElementById('imageSelect').value;
-        //$.ajax({
-        //    type: "POST",
-        //    url: "/Cards/Create",
-        //    data: { title: title, description: description, image: image },
-        //    success: function (result) {
-        //        // Recargar la página después de agregar la card
-        //        location.reload();
-        //    }
-        //});
-    });
-
-    // Validar el formulario antes de enviarlo
-    document.getElementById('addCardForm').addEventListener("click",function (event) {
-        var title = document.getElementById('titleInput').value;
-        var description = document.getElementById('descriptionInput').value;
-
-
-        if (title == "" || description == "") {
-            alert("Por favor, complete todos los campos del formulario.");
-            event.preventDefault();
-        }
-
-
-
-        });
-
-    </script>
+  
