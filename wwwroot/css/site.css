@@ -9,6 +9,50 @@
     font-weight: bold;
     color: blue;
 }
+/* estilos para los botones */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item {
+    margin-right: 1rem;
+    margin-bottom: 0;
+}
+
+.btn-primary {
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.5rem 1.5rem;
+    margin: 0;
+}
+
+@media (max-width: 575px) {
+    .navbar-nav {
+        flex-wrap: wrap;
+    }
+
+    .nav-item {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* estilos generales */
+.container {
+    max-width: 960px;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.footer {
+    height: 60px;
+    line-height: 60px;
+}
+
 
 .card {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);

@@ -10,29 +10,23 @@
 
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                @*    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                Agregar Card
-                </button>*@
-                    <ul class="navbar-nav flex-grow-1 justify-content-center text-center">
-                        <li class="nav-item d-flex">
-                            <button id="addCardBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCardModal">
-                                Agregar Card
-                            </button>
-                        </li>
-                    </ul>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <ul class="navbar-nav flex-grow-1 justify-content-center text-center align-items-center">
+                <li class="nav-item d-flex">
+                    <button id="addCardBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCardModal">
+                        Agregar Card
+                    </button>
+                </li>
+                <li class="nav-item d-flex">
+                    @Html.ActionLink("Iniciar Sesion", "Login", "User", null, new { @class = "btn btn-primary" })
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 
-               
-
-
-
-
-
-            </div>
-        </nav>
-    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
