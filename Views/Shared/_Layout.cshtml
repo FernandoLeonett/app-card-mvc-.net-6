@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,22 +13,34 @@
 
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <ul class="navbar-nav flex-grow-1 justify-content-center text-center align-items-center">
-                <li class="nav-item d-flex">
-                    <button id="addCardBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCardModal">
-                        Agregar Card
-                    </button>
-                </li>
-                <li class="nav-item d-flex">
-                    @Html.ActionLink("Iniciar Sesion", "Login", "User", null, new { @class = "btn btn-primary" })
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                @if (Context.Session.GetString("userEmail") != null)
+                {
+                    <ul class="navbar-nav flex-grow-1 justify-content-center text-center align-items-center">
+
+                        @if (Context.Session.GetString("rol") == Rol.Administrator.ToString())
+                        {
+                            <li class="nav-item d-flex">
+                                <button id="addCardBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCardModal">
+                                    Agregar Card
+                                </button>
+                            </li>
+                        }
+                        <li class="nav-item d-flex">
+                            @Html.ActionLink("Cerrar Sesion", "Logout", "User", null, new { @class = "btn btn-primary" })
+                        </li>
+
+                          <li class="nav-item d-flex">
+                            <p>Bienvenido: @Context.Session.GetString("userEmail")</p>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </nav>
+    </header>
 
     <div class="container">
         <main role="main" class="pb-3">

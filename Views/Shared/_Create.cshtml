@@ -14,15 +14,15 @@
                     @Html.AntiForgeryToken()
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Title)
-                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Title)
+                        @Html.LabelFor(model => model.Card.Title)
+                        @Html.TextBoxFor(model => model.Card.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Card.Title)
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Description)
-                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Description)
+                        @Html.LabelFor(model => model.Card.Description)
+                        @Html.TextAreaFor(model => model.Card.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Card.Description)
                     </div>
 
                     <div class="form-group">
@@ -33,7 +33,7 @@
 
                     <div class="form-group">
                         <label for="DataSource">Fuente de datos:</label>
-                        @Html.DropDownListFor(model => model.DataSource, new SelectList(Enum.GetValues(typeof(DataSource))), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.Card.DataSource, new SelectList(Enum.GetValues(typeof(DataSource))), new { @class = "form-control" })
                     </div>
 
 

@@ -1,5 +1,12 @@
 ﻿namespace app_card.Models
 {
+
+    public enum DataSource
+    {
+
+        CHRISTMAS,
+        BIRTHDAY
+    }
     public class Card
     {
         public int Id { get; set; }

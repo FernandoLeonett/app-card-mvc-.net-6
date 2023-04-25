@@ -1,24 +1,33 @@
 ﻿using app_card.Models;
+using app_card.Models.validators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
+using app_card.Models.Interfaces;
+using static NuGet.Protocol.Core.Types.Repository;
 
 namespace app_card.Controllers
 {
+
+    [AccessRoutes]
     public class CardController : Controller
     {
+        private  IRepositoryFactory _repositoryFactory;
+
+
+
+        public CardController(IRepositoryFactory repositoryFactory)
+        {
+            _repositoryFactory = repositoryFactory;
+        }
         // GET: HomeController
+
         public ActionResult Index()
         {
-            var cards = new List<Card>
-{
-    new Card { Title = "Shopping", Description = "Go shopping for new clothes", Id = 1, UrlImage = "~/img/shopping.jpg", DataSource = DataSource.BIRTHDAY },
-    new Card { Title = "Cliff", Description = "Watch the sunset from the top of the cliff", Id = 2, UrlImage = "~/img/cliff.jpg", DataSource = DataSource.CHRISTMAS },
-    new Card { Title = "Bridge", Description = "Take a walk on the bridge", Id = 3, UrlImage = "~/img/bridge.jpg", DataSource = DataSource.BIRTHDAY },
-    new Card { Title = "Bird", Description = "Take pictures of the colorful birds in the park lorem ipsusmmasasa jjasasas hhhh sss jjja kkkkas ljjjnlas fernando jose hernandez leonett es el mj", Id = 4, UrlImage = "~/img/bird.jpg", DataSource = DataSource.CHRISTMAS,  }, new Card { Title = "Bird", Description = "Take pictures of the colorful birds in the park lorem ipsusmmasasa jjasasas hhhh sss jjja kkkkas ljjjnlas fernando jose hernandez leonett es el mj", Id = 4, DataSource = DataSource.CHRISTMAS }
-};
-
+             List<Card> cards = _repositoryFactory.GetCardRepository().GetAll();
             var imageOptions = new List<SelectListItem>
         {
             new SelectListItem { Value = "bird.jpg", Text = "Imagen 1" },
@@ -41,20 +50,7 @@ namespace app_card.Controllers
             return View(model);
         }
 
-
-
-
-
-
-
-
-
-
-        // GET: HomeController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+           
 
         // GET: HomeController/Create
         public ActionResult Create()
@@ -70,11 +66,11 @@ namespace app_card.Controllers
         // POST: HomeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CardViewModel card, string ImageOptions)
+        public ActionResult Create(CardViewModel CreatedCard, string ImageOptions)
         {
             try
             {
-                Card newCard = new Card { Description = card.Description, Title = card.Title };
+                Card newCard = new Card { Description = CreatedCard.Card.Description, Title = CreatedCard.Card.Title };
 
                 return RedirectToAction(nameof(Index));
             }
