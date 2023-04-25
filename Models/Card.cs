@@ -4,8 +4,8 @@
     public enum DataSource
     {
 
-        CHRISTMAS,
-        BIRTHDAY
+        BIRTHDAYCARDS,
+        ChristmasCards
     }
     public class Card
     {

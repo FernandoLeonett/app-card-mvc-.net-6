@@ -27,7 +27,7 @@ namespace app_card.Controllers
 
         public ActionResult Index()
         {
-             List<Card> cards = _repositoryFactory.GetCardRepository().GetAll();
+             List<Card> cards = _repositoryFactory.GetCardRepository().GetAll(DataSource.ChristmasCards,DataSource.BIRTHDAYCARDS);
             var imageOptions = new List<SelectListItem>
         {
             new SelectListItem { Value = "bird.jpg", Text = "Imagen 1" },

@@ -9,18 +9,73 @@ namespace app_card.Repositories
 {
     public class CardRepository : ICardRepository
     {
-        private readonly string _connectionString1;
-        private readonly string _connectionString2;
+        private readonly IConfiguration _configuration;
 
-        public CardRepository(string connectionString1, string connectionString2)
+
+        public CardRepository(IConfiguration configuration)
         {
-            _connectionString1 = connectionString1;
-            _connectionString2 = connectionString2;
+
+            _configuration = configuration;
+
         }
 
         public bool Add(Card card)
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(_configuration.GetConnectionString(card.DataSource.ToString()));
+
+            try
+            {
+                connection.Open();
+
+                var command = new SqlCommand("INSERT INTO Cards (Title, Description, UrlImage) VALUES (@Title, @Description, @UrlImage)", connection);
+                command.Parameters.AddWithValue("@Title", card.Title);
+                command.Parameters.AddWithValue("@Description", card.Description);
+                command.Parameters.AddWithValue("@UrlImage", card.UrlImage);
+
+                return command.ExecuteNonQuery() > 0;
+            }
+            catch (Exception)
+            {
+                // Lanzamos la excepción para que sea capturada en los controladores
+                throw;
+            }
+            finally
+            {
+                // Usamos Dispose para liberar los recursos de la conexión
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Dispose();
+                }
+            }
+        }
+
+
+        public bool Delete(int id, DataSource db)
+        {
+            using var connection = new SqlConnection(_configuration.GetConnectionString(db.ToString()));
+
+            try
+            {
+                connection.Open();
+
+                var command = new SqlCommand("DELETE FROM Cards WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", id);
+
+                return command.ExecuteNonQuery() > 0;
+            }
+            catch (Exception)
+            {
+                // Lanzamos la excepción para que sea capturada en los controladores
+                throw;
+            }
+            finally
+            {
+                // Usamos Dispose para liberar los recursos de la conexión
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Dispose();
+                }
+            }
         }
 
         public bool Delete(int id)
@@ -28,12 +83,12 @@ namespace app_card.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Card> GetAll()
+        public List<Card> GetAll(DataSource db1, DataSource db2)
         {
             var cards = new List<Card>();
 
-            using var connection1 = new SqlConnection(_connectionString1);
-            using var connection2 = new SqlConnection(_connectionString2);
+            using var connection1 = new SqlConnection(_configuration.GetConnectionString(db1.ToString()));
+            using var connection2 = new SqlConnection(_configuration.GetConnectionString(db1.ToString()));
 
             try
             {
@@ -49,6 +104,7 @@ namespace app_card.Repositories
                         Title = reader1.GetString(1),
                         Description = reader1.GetString(2),
                         UrlImage = reader1.GetString(3),
+                        DataSource =db1
                       
                     };
                     cards.Add(card);
@@ -68,7 +124,9 @@ namespace app_card.Repositories
                         Title = reader2.GetString(1),
                         Description = reader2.GetString(2),
                         UrlImage = reader2.GetString(3),
-                   
+                        DataSource = db2
+
+
                     };
                     cards.Add(card);
                 }
@@ -97,14 +155,40 @@ namespace app_card.Repositories
             return cards;
         }
 
-        public Card GetById(int id)
+        public Card GetById(int id, DataSource db)
         {
             throw new NotImplementedException();
         }
 
         public bool Update(Card card)
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(_configuration.GetConnectionString(card.DataSource.ToString()));
+
+            try
+            {
+                connection.Open();
+
+                var command = new SqlCommand("UPDATE Cards SET Title = @Title, Description = @Description, UrlImage = @UrlImage WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", card.Id);
+                command.Parameters.AddWithValue("@Title", card.Title);
+                command.Parameters.AddWithValue("@Description", card.Description);
+                command.Parameters.AddWithValue("@UrlImage", card.UrlImage);
+
+                return command.ExecuteNonQuery() > 0;
+            }
+            catch (Exception)
+            {
+                // Lanzamos la excepción para que sea capturada en los controladores
+                throw;
+            }
+            finally
+            {
+                // Usamos Dispose para liberar los recursos de la conexión
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Dispose();
+                }
+            }
         }
     }
 }

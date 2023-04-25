@@ -9,27 +9,30 @@ namespace app_card
     {
 
         private readonly IConfiguration _configuration;
-
         public RepositoryFactory(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+      
+
         public ICardRepository GetCardRepository()
         {
         
-            return new CardRepository(_configuration.GetConnectionString("BirthdayCards"), _configuration.GetConnectionString("ChristmasCards"));
+            return new CardRepository(_configuration);
         }
 
         private string GetConnectionString(DataSource baseType)
         {
-            string? connectionString = baseType switch
+            try
             {
-                DataSource.BIRTHDAY => _configuration.GetConnectionString("BirthdayCards"),
-                DataSource.CHRISTMAS => _configuration.GetConnectionString("ChristmasCards"),
-                _ => throw new ArgumentException("Invalid BaseType value"),
-            };
-            return connectionString;
+                return _configuration.GetConnectionString(baseType.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not find connection string for {baseType} DataSource.", ex);
+            }
         }
+
     }
 }

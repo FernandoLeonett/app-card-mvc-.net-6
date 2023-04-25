@@ -82,20 +82,11 @@ namespace app_card.Controllers
             // Devolver la vista Login con modelo de usuario
             return View("Login", user);
         }
-
-
-
-        // POST: UserController/Create
-
-
         // GET: UserController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
-
-    
-
       
 
       
