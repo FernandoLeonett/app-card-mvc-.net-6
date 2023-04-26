@@ -9,6 +9,21 @@
     font-weight: bold;
     color: blue;
 }
+
+/*estilos param el titulo*/
+
+    .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.card-title-bg {
+    background-color: #333;
+    color: #fff;
+}
+
 /* estilos para los botones */
 .navbar-nav {
     display: flex;

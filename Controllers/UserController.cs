@@ -1,5 +1,4 @@
 ﻿using app_card.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vereyon.Web;
 
@@ -40,14 +39,15 @@ namespace app_card.Controllers
         // GET: UserController
         public ActionResult Login()
         {
-           if( HttpContext.Session.GetString("userEmail") == null ) {
+            if (HttpContext.Session.GetString("userEmail") == null)
+            {
                 return View();
             }
             else
             {
                 return RedirectToAction("Index", "Card");
             }
-        
+
         }
 
         // GET: UserController/Details/5
@@ -71,7 +71,7 @@ namespace app_card.Controllers
                 }
                 else
                 {
-                    // Agregar mensaje de error en TempData
+                    // Agregar mensaje de error 
                     _flashMessage.Warning("Usuario no existe", "Error en Login");
 
                     // Devolver la vista Login con mensaje de error
@@ -83,20 +83,16 @@ namespace app_card.Controllers
             return View("Login", user);
         }
         // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-      
 
-      
+
         public IActionResult Logout()
         {
-
-            HttpContext.Session.Clear();
+            if (HttpContext.Session.GetString("userEmail") != null)
+            {
+                HttpContext.Session.Clear();
+            }
 
             return RedirectToAction("Login");
-
 
         }
     }

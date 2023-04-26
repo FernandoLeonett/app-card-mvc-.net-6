@@ -1,6 +1,4 @@
 ﻿using app_card.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
 
 public class IndexViewModel
 {

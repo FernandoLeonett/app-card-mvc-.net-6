@@ -1,6 +1,4 @@
-﻿using System.Security.AccessControl;
-
-namespace app_card.Models.Interfaces
+﻿namespace app_card.Models.Interfaces
 {
     public interface IRepositoryFactory
     {

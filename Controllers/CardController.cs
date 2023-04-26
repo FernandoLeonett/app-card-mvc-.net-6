@@ -1,13 +1,9 @@
 ﻿using app_card.Models;
 using app_card.Models.validators;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
 using app_card.Models.Interfaces;
-using static NuGet.Protocol.Core.Types.Repository;
+using Vereyon.Web;
 
 namespace app_card.Controllers
 {
@@ -15,24 +11,31 @@ namespace app_card.Controllers
     [AccessRoutes]
     public class CardController : Controller
     {
-        private  IRepositoryFactory _repositoryFactory;
+        private IRepositoryFactory _repositoryFactory;
+        private readonly IFlashMessage _flashMessage;
 
 
 
-        public CardController(IRepositoryFactory repositoryFactory)
+        public CardController(IRepositoryFactory repositoryFactory, IFlashMessage flashMessage)
         {
             _repositoryFactory = repositoryFactory;
+            _flashMessage = flashMessage;
         }
         // GET: HomeController
 
         public ActionResult Index()
         {
-             List<Card> cards = _repositoryFactory.GetCardRepository().GetAll(DataSource.ChristmasCards,DataSource.BIRTHDAYCARDS);
+            List<Card> cards = _repositoryFactory.GetCardRepository().GetAll(DataSource.ChristmasCards, DataSource.BIRTHDAYCARDS);
             var imageOptions = new List<SelectListItem>
         {
-            new SelectListItem { Value = "bird.jpg", Text = "Imagen 1" },
-            new SelectListItem { Value = "cliff.jpg", Text = "Imagen 2" },
-            new SelectListItem { Value = "shopping.jpg", Text = "Imagen 3" }
+            new SelectListItem { Value = "~/img/bird.jpg", Text = "Bird" },
+            new SelectListItem { Value = "~/img/bridge.jpg", Text = "Bridge" },
+            new SelectListItem { Value = "~/img/cliff.jpg", Text = "Cliff" },
+            new SelectListItem { Value = "~/img/colibri.jpg", Text = "Colibri" },
+            new SelectListItem { Value = "~/img/clothe.jpg", Text = "Clothe" },
+            new SelectListItem { Value = "~/img/orange.jpg", Text = "Orange" },
+            new SelectListItem { Value = "~/img/ninos.jpg", Text = "Ninos" },
+            new SelectListItem { Value = "~/img/shopping.jpg", Text = "Shopping" }
         };
             IndexViewModel model = new IndexViewModel()
             {
@@ -50,72 +53,99 @@ namespace app_card.Controllers
             return View(model);
         }
 
-           
-
-        // GET: HomeController/Create
-        public ActionResult Create()
-        {
-            var model = new CardViewModel();
-            model.ImageOptions = new SelectList(new List<string> { "option1", "option2", "option3" }); // Lista de opciones para la imagen
-
-            return RedirectToAction("Index");
-        }
-
-
-
-        // POST: HomeController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(CardViewModel CreatedCard, string ImageOptions)
+        public ActionResult Create(CardViewModel createdCard)
         {
             try
             {
-                Card newCard = new Card { Description = CreatedCard.Card.Description, Title = CreatedCard.Card.Title };
+                // Verificar si la propiedad ImageOptions es nula
+                
 
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    Card newCard = new Card
+                    {
+                        Description = createdCard.Card.Description,
+                        Title = createdCard.Card.Title,
+                        UrlImage = createdCard.SelectedOption,
+                        DataSource = createdCard.Card.DataSource
+                    };
+
+                    _repositoryFactory.GetCardRepository().Add(newCard);
+
+                    _flashMessage.Warning("Operacion exitosa", "Imagen Agregada");
+
+                }
+                else
+                {
+                    _flashMessage.Warning("Error al crear", "verifique los campos");
+                }
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _flashMessage.Danger("Ha ocurrido un error ", ex.Message);
+
+                return RedirectToAction("Index");
             }
         }
 
         // GET: CardController/Edit/5
         [HttpPost]
-        public IActionResult Edit(string title, string description)
+        public IActionResult Edit(Card card)
         {
-            // actualizar los datos en la base de datos
-            // ...
+            try
+            {
+                // Validar modelo
+                if (ModelState.IsValid)
+                {
+                    if (_repositoryFactory.GetCardRepository().Update(card))
+                    {
+                        _flashMessage.Info("La Card ", card.Title + " Ha sido actualizada");
+                        return RedirectToAction("Index");
 
-            // redirigir al usuario a la página principal
-            return RedirectToAction("Index");
+                    }
+                    return RedirectToAction("Index");
+                }
+                _flashMessage.Warning("La card no se puede actualizar", "verifique los campos");
+
+
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                _flashMessage.Danger("Ha ocurrido un error ", ex.Message);
+                return RedirectToAction("Index");
+            }
         }
 
-
-        // POST: HomeController/Edit/5
-
-
-
-
-        // DELETE: CardController/Delete/5
         [Route("Card/Delete/{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id, DataSource db)
+
         {
+
+            if (id != null)
+            {
+
+                if (_repositoryFactory.GetCardRepository().Delete(id, db))
+                {
+
+                    _flashMessage.Info("Operacion Exitosa", "la card fue eliminada");
+                }
+                else
+                {
+                    _flashMessage.Warning("La card no se encontro", "la card no fue eliminada");
+
+                }
+            }
+            else
+            {
+                _flashMessage.Warning("No se puedo eliminar", "no se ha provisto un identificador para la card");
+
+            }
             // Código del método
             return RedirectToAction("Index");
         }
-        public ActionResult DeleteModal(int id, string title)
-        {
-
-            Card card= new Card { Title = title, Id=id };
-
-            TempData["deleteCard"] = card;
-            // Código del método
-          return RedirectToAction("Index");
-        }
-
-
-
-
     }
 }

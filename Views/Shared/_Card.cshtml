@@ -3,7 +3,7 @@
 <div class="col-md-4 col-12 mb-4">
     <div class="card">
         <div class="card-image" style="background-image: url('@Url.Content(string.IsNullOrEmpty(Model.UrlImage) ? "~/img/default-image.jpg" : Model.UrlImage)')">
-            <div class="card-title">@Model.Title</div>
+            <div class="card-title card-title-bg">@Model.Title</div>
 
             @if (Context.Session.GetString("rol") == Rol.Administrator.ToString())
             {

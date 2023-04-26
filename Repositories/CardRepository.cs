@@ -1,7 +1,5 @@
 ﻿using app_card.Models;
 using app_card.Models.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -22,15 +20,17 @@ namespace app_card.Repositories
         public bool Add(Card card)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString(card.DataSource.ToString()));
+            string uniqueId = Guid.NewGuid().ToString();
 
             try
             {
                 connection.Open();
 
-                var command = new SqlCommand("INSERT INTO Cards (Title, Description, UrlImage) VALUES (@Title, @Description, @UrlImage)", connection);
+                var command = new SqlCommand("INSERT INTO Cards VALUES (@Id, @Title, @Description, @UrlImage)", connection);
+                command.Parameters.AddWithValue("@Id", uniqueId);
                 command.Parameters.AddWithValue("@Title", card.Title);
                 command.Parameters.AddWithValue("@Description", card.Description);
-                command.Parameters.AddWithValue("@UrlImage", card.UrlImage);
+                command.Parameters.AddWithValue("@UrlImage", card.UrlImage ?? (object)DBNull.Value); // Operador ternario
 
                 return command.ExecuteNonQuery() > 0;
             }
@@ -50,7 +50,7 @@ namespace app_card.Repositories
         }
 
 
-        public bool Delete(int id, DataSource db)
+        public bool Delete(string id, DataSource db)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString(db.ToString()));
 
@@ -78,17 +78,14 @@ namespace app_card.Repositories
             }
         }
 
-        public bool Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public List<Card> GetAll(DataSource db1, DataSource db2)
         {
             var cards = new List<Card>();
 
             using var connection1 = new SqlConnection(_configuration.GetConnectionString(db1.ToString()));
-            using var connection2 = new SqlConnection(_configuration.GetConnectionString(db1.ToString()));
+            using var connection2 = new SqlConnection(_configuration.GetConnectionString(db2.ToString()));
 
             try
             {
@@ -100,12 +97,12 @@ namespace app_card.Repositories
                 {
                     var card = new Card
                     {
-                        Id = reader1.GetInt32(0),
+                        Id = reader1.GetGuid(0),
                         Title = reader1.GetString(1),
                         Description = reader1.GetString(2),
-                        UrlImage = reader1.GetString(3),
-                        DataSource =db1
-                      
+                        UrlImage = reader1.IsDBNull(3) ? null : reader1.GetString(3),
+                        DataSource = db1
+
                     };
                     cards.Add(card);
                 }
@@ -120,10 +117,10 @@ namespace app_card.Repositories
                 {
                     var card = new Card
                     {
-                        Id = reader2.GetInt32(0),
+                        Id = reader2.GetGuid(0),
                         Title = reader2.GetString(1),
                         Description = reader2.GetString(2),
-                        UrlImage = reader2.GetString(3),
+                        UrlImage = reader2.IsDBNull(3) ? null : reader2.GetString(3),
                         DataSource = db2
 
 
@@ -168,11 +165,10 @@ namespace app_card.Repositories
             {
                 connection.Open();
 
-                var command = new SqlCommand("UPDATE Cards SET Title = @Title, Description = @Description, UrlImage = @UrlImage WHERE Id = @Id", connection);
+                var command = new SqlCommand("UPDATE Cards SET Title = @Title, Description = @Description WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", card.Id);
                 command.Parameters.AddWithValue("@Title", card.Title);
                 command.Parameters.AddWithValue("@Description", card.Description);
-                command.Parameters.AddWithValue("@UrlImage", card.UrlImage);
 
                 return command.ExecuteNonQuery() > 0;
             }

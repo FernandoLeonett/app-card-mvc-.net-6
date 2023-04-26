@@ -6,6 +6,6 @@
         Card GetById(int id, DataSource db);
         bool Add(Card card);
         bool Update(Card card);
-        bool Delete(int id);
+        bool Delete(string id, DataSource db);
     }
 }

@@ -1,16 +1,16 @@
-﻿using app_card.Controllers;
-using app_card.Models;
+﻿using app_card.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 public class CardViewModel
 {
-
-
     public Card Card { get; set; }
 
 
+    [DisplayName("Imagenes")]
+    public SelectList? ImageOptions { get; set; }
+    public string? SelectedOption { get; set; }
 
-    public SelectList ImageOptions { get; set; } // Opciones para la selección de la imagen
+
 }
 

@@ -18,6 +18,12 @@ builder.Services.AddTransient(_ => builder.Configuration.GetConnectionString("Bi
 builder.Services.AddTransient(_ => builder.Configuration.GetConnectionString("ChristmasCards"));
 builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
+builder.Services.AddControllersWithViews()
+        .AddViewOptions(options =>
+        {
+            options.HtmlHelperOptions.ClientValidationEnabled = true;
+        });
+
 
 
 

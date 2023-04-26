@@ -2,47 +2,46 @@
 
 <div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content p-4">
             <div class="modal-header">
                 <h4 class="modal-title" id="addCardModalLabel">Agregar Card</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 @using (Html.BeginForm("Create", "Card", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.Card.Title)
-                        @Html.TextBoxFor(model => model.Card.Title, new { @class = "form-control" })
+                        @Html.EditorFor(model => model.Card.Title, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Card.Title)
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.Card.Description)
-                        @Html.TextAreaFor(model => model.Card.Description, new { @class = "form-control" })
+                        @Html.EditorFor(model => model.Card.Description, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Card.Description)
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.ImageOptions)
-                        @Html.DropDownListFor(model => model.ImageOptions, new SelectList(Model.ImageOptions, "Value", "Text"), "-- Seleccione una imagen --", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.ImageOptions)
+                        @Html.DropDownListFor(model => model.SelectedOption, new SelectList(Model.ImageOptions, "Value", "Text"), "-- Seleccione una imagen --", new { @class = "form-control" })
+
                     </div>
 
                     <div class="form-group">
-                        <label for="DataSource">Fuente de datos:</label>
-                        @Html.DropDownListFor(model => model.Card.DataSource, new SelectList(Enum.GetValues(typeof(DataSource))), new { @class = "form-control" })
+                        @Html.LabelFor(model => model.Card.DataSource, "Fuente de datos:")
+                        @Html.DropDownListFor(model => model.Card.DataSource, new SelectList(Enum.GetValues(typeof(DataSource))), "-- Seleccione una opción --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Card.DataSource)
+
                     </div>
 
-
-                    <button type="submit" class="btn btn-primary">Agregar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary mt-3">Agregar Card</button>
+                    <button type="button" class="btn btn-secondary mt-3 " data-bs-dismiss="modal">Cerrar</button>
                 }
-
+                @Html.ValidationSummary()
             </div>
         </div>
     </div>
 </div>
-
