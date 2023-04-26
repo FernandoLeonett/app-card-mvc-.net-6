@@ -2,6 +2,12 @@
 
 App-Card es una aplicación web desarrollada con ADO.NET 6 y MVC Core que permite a los usuarios acceder a diferentes funcionalidades según su rol en la aplicación. El rol "Administrator" puede agregar, editar y eliminar tarjetas ("Cards"), mientras que el rol "User" solo puede iniciar sesión y ver las tarjetas existentes.
 
+### Usuario admninistrador:
+  **ariel@example.com
+*** clave: 1234
+### Usuario User:
+  **fernando@example.com
+*** clave: 1234
 ## Requisitos previos
 Antes de comenzar a utilizar la aplicación, necesitarás tener instalado lo siguiente:
 
